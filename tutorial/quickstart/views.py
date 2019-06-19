@@ -12,30 +12,22 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     print("UserViewSet!")
 
-
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
 class HomeView(TemplateView):
-    var1 = "192.168.1.1"
-    var2 = "USA"
-
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context.update({'geoData': self.webRequest()})
         return context
 
     def __init__(self):
-        response = requests.get('https://freegeoip.app/json/')
-        geodata = response.json()
-        print(geodata)
-    
-
+        print("initialized")
     
     def webRequest(self):
         response = requests.get('https://freegeoip.app/json/')
-        geodata = response.json()
+        geodata = response.json() 
         return {
             'ip': geodata['ip'],
             'country': geodata['country_name']
@@ -44,14 +36,19 @@ class HomeView(TemplateView):
     template_name = 'home/home.html'
 
 class WebRequest(APIView):
-    def post(self, request, *args, **kwargs):
-        return self.process_request(request, request.data)
+    def post(self, url, dataObject):
+        response = requests.post(url, dataObject)
+        return self.process_request(response)
 
-    def get(self, request, format=None):
-        return self.process_request(request, request.query_params)
+    def get(self, url):
+        response = requests.get(url)
+        return self.process_json(response)
 
-    def process_request(self, request, data):
-        print(data)
+    def process_json(self, response):
+        return response.json()
+
+    def process_request(self, response):
+        return response.text()
 
 
 def renderHomePage(request):
