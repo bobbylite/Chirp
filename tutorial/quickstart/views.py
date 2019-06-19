@@ -6,15 +6,14 @@ from tutorial.quickstart.serializers import UserSerializer, GroupSerializer
 from rest_framework.views import APIView
 import requests
 
-
+class GroupViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     print("UserViewSet!")
-
-class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
 
 class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
