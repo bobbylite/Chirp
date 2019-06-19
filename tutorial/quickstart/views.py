@@ -13,7 +13,6 @@ class GroupViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    print("UserViewSet!")
 
 class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
